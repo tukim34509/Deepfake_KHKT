@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Phân Tích & Giám Định 4C</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Custom progress circle */
+        .progress-circle {
+            background: conic-gradient(#dc2626 0%, #f87171 0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 1s ease-out;
+        }
+        .progress-circle::before {
+            content: "";
+            position: absolute;
+            inset: 8px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        /* Scanning Animation */
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.8);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+            animation: scan 2s linear infinite;
+            z-index: 20;
+            display: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 pb-10">
+
+    <!-- Navbar & Header -->
+    <div class="bg-white border-b border-slate-200 text-[10px] sm:text-xs text-slate-500 py-1.5 px-4 flex flex-wrap justify-between items-center z-50 relative">
+        <div class="flex items-center gap-4">
+            <span><i class="fa-solid fa-circle text-green-500 text-[8px] mr-1"></i> HỆ THỐNG AI FORENSICS: ĐANG HOẠT ĐỘNG</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <span>Đường dây nóng 24/7: 1900 8198</span>
+        </div>
+    </div>
+
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-900 rounded-md flex items-center justify-center text-white font-bold text-sm"><i class="fa-solid fa-shield-halved"></i></div>
+                <div>
+                    <div class="text-lg font-bold text-blue-900 leading-none">APP4C</div>
+                    <div class="text-[10px] text-slate-500 tracking-wider">AI VERIFICATION</div>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center space-x-6 font-medium text-sm text-slate-600">
+                <a href="#" class="text-slate-600 hover:text-blue-900">Trang chủ</a>
+                <a href="#" class="text-blue-700 font-bold bg-blue-50 px-3 py-1.5 rounded-md">Quét 4C</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <div class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-blue-950 mb-2">Hệ Thống Phân Tích & Giám Định 4C</h1>
+                <p class="text-slate-600 text-sm max-w-xl">Phát hiện gian lận đa phương thức: hình ảnh, video do AI tạo dựng.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+            
+            <!-- LEFT COLUMN: Input Form -->
+            <div class="xl:col-span-4 flex flex-col gap-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+                    
+                    <!-- Phương thức tiếp nhận -->
+                    <div class="mb-5">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-blue-950 text-sm flex items-center gap-2"><i class="fa-solid fa-list-check text-blue-600"></i> Phương Thức</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <button class="bg-blue-900 text-white font-semibold py-2 rounded border border-blue-900 flex items-center justify-center gap-2"><i class="fa-regular fa-image"></i> Hình ảnh / Video</button>
+                            <button class="bg-slate-50 text-slate-600 py-2 rounded border border-slate-200 flex items-center justify-center gap-2"><i class="fa-solid fa-qrcode"></i> Quét Trực Tiếp</button>
+                        </div>
+                    </div>
+
+                    <!-- Upload Zone -->
+                    <input type="file" id="media-upload" accept="image/*,video/*" class="hidden">
+                    
+                    <div id="drop-zone" class="relative border-2 border-dashed border-blue-300 bg-blue-50/50 rounded-lg p-2 flex flex-col items-center justify-center text-center mb-5 hover:bg-blue-50 transition cursor-pointer min-h-[160px] overflow-hidden">
+                        
+                        <!-- Upload Placeholder -->
+                        <div id="upload-placeholder" class="p-6">
+                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-sm mb-3 mx-auto">
+                                <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-blue-900 text-sm mb-1">Click hoặc Kéo & thả tệp tin</h4>
+                            <p class="text-xs text-slate-500">Hỗ trợ JPG, PNG, WEBP, MP4</p>
+                        </div>
+
+                        <!-- Preview Area (Hidden initially) -->
+                        <div id="preview-area" class="hidden w-full h-full absolute inset-0 bg-slate-900 flex items-center justify-center">
+                            <div class="absolute top-2 right-2 z-30">
+                                <button id="remove-file-btn" class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"><i class="fa-solid fa-xmark text-xs"></i></button>
+                            </div>
+                            <img id="image-preview" class="max-h-full max-w-full object-contain hidden" src="" alt="Preview">
+                            <video id="video-preview" class="max-h-full max-w-full object-contain hidden" controls></video>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button id="scan-btn" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-lg shadow-md flex items-center justify-center gap-2 transition mb-4 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-fingerprint"></i> Bắt Đầu Giám Định 4C Toàn Diện
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Dashboard/Results -->
+            <div class="xl:col-span-8 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col relative min-h-[400px]">
+                
+                <!-- IDLE STATE -->
+                <div id="idle-state" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 bg-slate-50/50 z-10">
+                    <i class="fa-solid fa-microchip text-6xl mb-4 text-slate-200"></i>
+                    <p class="font-medium">Hệ thống đang chờ dữ liệu đầu vào...</p>
+                    <p class="text-xs mt-1">Vui lòng tải lên hình ảnh hoặc video để bắt đầu phân tích</p>
+                </div>
+
+                <!-- SCANNING STATE -->
+                <div id="scanning-state" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-blue-900/90 text-white z-20 backdrop-blur-sm">
+                    <i class="fa-solid fa-circle-notch fa-spin text-5xl mb-4 text-blue-400"></i>
+                    <h3 class="text-xl font-bold mb-2">Đang phân tích vi vết bằng AI...</h3>
+                    <p class="text-sm text-blue-200" id="scan-status-text">Khởi tạo Engine 4C Forensic...</p>
+                    <div class="w-64 bg-blue-950 rounded-full h-1.5 mt-4">
+                        <div id="scan-progress-bar" class="bg-blue-400 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- RESULT STATE -->
+                <div id="result-state" class="hidden flex-col h-full">
+                    <!-- Result Header -->
+                    <div id="result-header" class="p-5 flex justify-between items-start border-b">
+                        <div>
+                            <h2 id="result-title" class="text-xl font-bold flex items-center gap-2"></h2>
+                            <div class="text-xs text-slate-600 mt-1 flex items-center gap-2">
+                                TỆP TIN: <span id="file-name-display" class="font-mono bg-white px-2 py-0.5 border border-slate-200 rounded"></span>
+                            </div>
+                        </div>
+                        <span id="result-badge" class="text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm"></span>
+                    </div>
+
+                    <div class="p-6">
+                        <!-- Top Result Summary -->
+                        <div class="flex flex-col md:flex-row gap-6 items-center bg-slate-50 p-5 rounded-xl border border-slate-100 mb-6">
+                            <!-- Chart -->
+                            <div class="relative w-32 h-32 flex-shrink-0 shadow-inner">
+                                <div id="result-circle" class="progress-circle w-full h-full">
+                                    <div class="relative z-10 flex flex-col items-center">
+                                        <span id="ai-percentage" class="text-3xl font-extrabold tracking-tighter"></span>
+                                        <span class="text-[9px] font-bold text-slate-500 tracking-wide uppercase mt-1">Xác suất do AI tạo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Details -->
+                            <div class="flex-1">
+                                <h3 class="font-bold text-slate-800 text-lg mb-2">Chẩn Đoán Rủi Ro Tổng Hợp</h3>
+                                <p id="result-description" class="text-sm text-slate-600 mb-4 leading-relaxed"></p>
+                                <div class="flex flex-wrap gap-4 text-sm">
+                                    <div class="border-l-2 border-slate-300 pl-3">
+                                        <div class="text-[10px] text-slate-500 uppercase font-semibold">Thời gian xử lý</div>
+                                        <div id="process-time" class="font-bold text-slate-800"></div>
+                                    </div>
+                                    <div class="border-l-2 border-slate-300 pl-3">
+                                        <div class="text-[10px] text-slate-500 uppercase font-semibold">Kiểu tệp</div>
+                                        <div id="file-type-display" class="font-bold text-slate-800 uppercase"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Heatmap Image Area -->
+                        <div class="mb-6">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2"><i class="fa-solid fa-layer-group text-blue-600"></i> Mô Phỏng Nhiệt Học & Dấu Vết</h3>
+                            </div>
+                            
+                            <div class="relative bg-slate-900 rounded-lg overflow-hidden border border-slate-300 flex justify-center items-center h-[300px]">
+                                <!-- Media element duplicated from upload -->
+                                <img id="result-img" class="h-full object-contain hidden" src="">
+                                <video id="result-video" class="h-full object-contain hidden" autoplay loop muted></video>
+                                
+                                <div class="scan-line" id="result-scan-line"></div>
+                                
+                                <!-- Fake UI Overlays for AI Detection effect -->
+                                <div id="ai-overlays" class="hidden absolute inset-0 pointer-events-none">
+                                    <div class="absolute top-[30%] left-[20%] w-16 h-16 border-2 border-red-500 rounded-full bg-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.5)]"></div>
+                                    <div class="absolute bottom-[20%] right-[25%] w-24 h-12 border-2 border-orange-500 border-dashed bg-orange-500/20"></div>
+                                    <div class="absolute top-[40%] right-[30%] bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow">Dị thường Pixel</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Reset Button -->
+                        <div class="flex justify-end pt-4 border-t border-slate-100">
+                            <button id="reset-btn" class="bg-slate-100 text-slate-700 font-semibold px-4 py-2 rounded-lg text-sm hover:bg-slate-200 transition flex items-center gap-2">
+                                <i class="fa-solid fa-rotate-right"></i> Quét Tệp Khác
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script Logic -->
+    <script src = "check.js"> </script>
+</body>
+</html>
